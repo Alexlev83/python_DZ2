@@ -69,6 +69,7 @@ numcols = len(array[0])
 numcols2 = len(str)
 
 
+
 sum = 0
 i = 0
 while i < numcols2:
