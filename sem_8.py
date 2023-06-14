@@ -23,16 +23,21 @@
 
 def Input_Users()->list:
     user=[]
-    user.append(input("Input ferst name "))
+    user.append(input("Input first name "))
     user.append(input("Input second name "))
     user.append(input("Input phone "))
     user.append(input("Input discription "))
     
     return user
 # print(Input_Users())
-def create( user:list)->dict:
-    # user1 = ["second_name1","first_name1","phone1","discription1"]
-# user2 = ["second_name2","first_name2","phone2","discription2"]
+# key_count = 0
+# phone_dir = dict()
+def create(phone_dir_local: dict, idc: int, user:list)->dict:
+    idc += 1
+    phone_dir_local[idc] = user
+    return phone_dir_local, idc
+user1 = ["second_name1","first_name1","phone1","discription1"]
+user2 = ["second_name2","first_name2","phone2","discription2"]
 
 # phone_dir, key_count=create(phone_dir,key_count,user1)
 # phone_dir, key_count=create(phone_dir,key_count,user2)
@@ -41,22 +46,56 @@ def create( user:list)->dict:
 def menu ():
     print("Введите 1, если хотите ввести пользователя ")
     print("Введите 2, если хотите распечатать справочник ")
-    key_count =0
+    print("Введите 3, для экспорта ")
+    key_count = 0
     phone_dir = dict()
     while True:
         num = int(input("Выберите операцию "))
         if num == 0:
             break
-        if (num ==1):
+        if num == 1:
            user = Input_Users()
            phone_dir, key_count = create(phone_dir,key_count,user)
         if num == 2:
             print (phone_dir)
-menu ()
-{1: ['Иванов',   'Иван',  '+7(xxx)xxx-xx-xx', 'desription_Иванов'], 
+        if num == 3:
+            file_name = input("Введите имя файла ")
+            export_phone_dir(phone_dir, file_name)
+
+def export_phone_dir(phone_dir:dict, file_name):
+ MAIN_DIR = abspath(dirname(__file__))
+ full_name = join(MAIN_DIR, file_name+ '.txt')
+ with open(full_name, mode = 'w', encoding = 'utf-8') as file:
+     for idc, user in phone_dir.items():
+         file.write(f"{idc},{user[0]},{user[1]},{user[2]},{user[3]}\n")
+
+def search_user(phone_dir: dict, searching: str) ->int:
+             for idc, user in phone_dir.items():
+                 if(user[0]).startswith(searching):
+                     return idc
+                 
+
+def print_dict(phone_dir: dict):
+    for idc, user in phone_dir.items():
+        print(f"{idc}:{user[0]} {user[1]} {user[2]} {user[3]}\n")
+from os.path import join, abspath, dirname
+phone_dir = {
+1: ['Иванов',   'Иван',  '+7(xxx)xxx-xx-xx', 'desription_Иванов'], 
 2: ['Петров',   'Петр',  '+7(---)xxx-xx-xx', 'desription_Петров'], 
 3: ['Соколов',  'Илья',  '+7(---)---------', 'desription_Соколов'], 
 4: ['Павельев', 'Андрей','+7(***)***-**-**', 'desription_Павельев'], 
 5: ['Пешехов',  'Антон', '+7++++++++++',     'desription_Пешехов'], 
-6: ['Сааков',   'Илья',  '+7(+++)+++-++-++', 'desription_Сааков'], 
+6: ['Сааков',   'Илья',  '+7(+++)+++-++-++', 'desription_Сааков'],  
 }
+
+print_dict(phone_dir)
+
+def creating():
+    file = 'Phonebook.csv'
+    with open(file, 'w', encoding='utf-8') as data:
+        data.write(f'Фамилия;Имя;Номер телефона;Описание\n')
+
+def from_file(file):
+    with open(file, 'r', encoding='utf-8') as data:
+        dictionary = data.read()
+    return dictionary
